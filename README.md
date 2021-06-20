@@ -7,7 +7,7 @@ A clubhouse.io api wrapper for deno.
 Import the clubhouse client and initialize it with your token.
 
 ```ts
-import { Clubhouse } from "https://deno.land/x/clubhouse_api@v1.0.0/mod.ts";
+import { Clubhouse } from "https://deno.land/x/clubhouse_api@v1.0.1/mod.ts";
 
 const client = new Clubhouse({ token: "xxx-xxx-xxx" });
 ```
