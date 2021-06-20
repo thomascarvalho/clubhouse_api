@@ -1,5 +1,7 @@
 # clubhouse_api
 
+[![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Flatest-version%2Fx%2Fclubhouse_api%2Fmod.ts)](https://deno.land/x/clubhouse_api)
+
 A clubhouse.io api wrapper for deno.
 
 ## Usage
