@@ -1,7 +1,7 @@
 // deno-lint-ignore-file camelcase
 /*
- * Clubhouse api types from :
- * https://clubhouse.io/api/rest/v3/clubhouse.swagger.json
+ * Shirtcut api types from :
+ * https://shortcut.com/api/rest/v3/shortcut.swagger.json
  */
 
 export type BasicWorkspaceInfo = {
@@ -10,7 +10,7 @@ export type BasicWorkspaceInfo = {
 };
 
 /**
- * Branch refers to a VCS branch. Branches are feature branches associated with Clubhouse Stories.
+ * Branch refers to a VCS branch. Branches are feature branches associated with Shortcut Stories.
  */
 export type Branch = {
   /**
@@ -108,7 +108,7 @@ export type Category = {
  * A Comment is any note added within the Comment field of a Story.
  */
 export type Comment = {
-  /** The Clubhouse application url for the Comment. */
+  /** The Shortcut application url for the Comment. */
   app_url: string;
 
   /**
@@ -515,7 +515,7 @@ export type CreateIteration = {
 };
 
 /**
- * Request parameters for creating a Label on a Clubhouse story.
+ * Request parameters for creating a Label on a Shortcut story.
  */
 export type CreateLabelParams = {
   /**
@@ -670,7 +670,7 @@ export type CreateStories = {
 };
 
 /**
- * Request parameters for creating a Comment on a Clubhouse Story.
+ * Request parameters for creating a Comment on a Shortcut Story.
  */
 export type CreateStoryCommentParams = {
   /**
@@ -960,7 +960,7 @@ export type CreateTask = {
   owner_ids?: string[];
 
   /**
-   * Defaults to the time/date the Task is created in Clubhouse but can be set to reflect another time/date.
+   * Defaults to the time/date the Task is created in Shortcut but can be set to reflect another time/date.
    * @format date-time
    */
   updated_at?: string;
@@ -989,7 +989,7 @@ export type CreateTaskParams = {
   owner_ids?: string[];
 
   /**
-   * Defaults to the time/date the Task is created in Clubhouse but can be set to reflect another time/date.
+   * Defaults to the time/date the Task is created in Shortcut but can be set to reflect another time/date.
    * @format date-time
    */
   updated_at?: string;
@@ -1065,7 +1065,7 @@ export type EntityTemplateTask = {
  * An Epic is a collection of stories that together might make up a release, a milestone, or some other large initiative that your organization is working on.
  */
 export type Epic = {
-  /** The Clubhouse application url for the Epic. */
+  /** The Shortcut application url for the Epic. */
   app_url: string;
 
   /** True/false boolean that indicates whether the Epic is archived or not. */
@@ -1242,7 +1242,7 @@ export type EpicSearchResults = {
  * EpicSlim represents the same resource as an Epic but is more light-weight, including all Epic fields except the comments array. The description string can be optionally included. Use the [Get Epic](#Get-Epic) endpoint to fetch the unabridged payload for an Epic.
  */
 export type EpicSlim = {
-  /** The Clubhouse application url for the Epic. */
+  /** The Shortcut application url for the Epic. */
   app_url: string;
 
   /** True/false boolean that indicates whether the Epic is archived or not. */
@@ -1525,7 +1525,7 @@ export type EpicStats = {
 };
 
 /**
- * Epic Workflow is the array of defined Epic States. Epic Workflow can be queried using the API but must be updated in the Clubhouse UI.
+ * Epic Workflow is the array of defined Epic States. Epic Workflow can be queried using the API but must be updated in the Shortcut UI.
  */
 export type EpicWorkflow = {
   /**
@@ -1560,7 +1560,7 @@ export type EpicWorkflow = {
 };
 
 /**
- * A File is any document uploaded to your Clubhouse. Files attached from a third-party service can be accessed using the Linked Files endpoint.
+ * A File is any document uploaded to your Shortcut. Files attached from a third-party service can be accessed using the Linked Files endpoint.
  */
 export type File = {
   /** Free form string corresponding to a text or image file. */
@@ -1581,7 +1581,7 @@ export type File = {
   /** This field can be set to another unique ID. In the case that the File has been imported from another tool, the ID in the other tool can be indicated here. */
   external_id?: string | null;
 
-  /** The name assigned to the file in Clubhouse upon upload. */
+  /** The name assigned to the file in Shortcut upon upload. */
   filename: string;
 
   /** The unique IDs of the Groups who are mentioned in the file description. */
@@ -1611,7 +1611,7 @@ export type File = {
   /** The unique IDs of the Stories associated with this file. */
   story_ids: number[];
 
-  /** The url where the thumbnail of the file can be found in Clubhouse. */
+  /** The url where the thumbnail of the file can be found in Shortcut. */
   thumbnail_url?: string | null;
 
   /**
@@ -1678,7 +1678,7 @@ export type GetStoryHistory = {
  * A Group.
  */
 export type Group = {
-  /** The Clubhouse application url for the Group. */
+  /** The Shortcut application url for the Group. */
   app_url: string;
 
   /** Whether or not the Group is archived. */
@@ -1694,7 +1694,7 @@ export type Group = {
   /** The description of the Group. */
   description: string;
 
-  /** Icons are used to attach images to Organizations, Members, and Loading screens in the Clubhouse web application. */
+  /** Icons are used to attach images to Organizations, Members, and Loading screens in the Shortcut web application. */
   display_icon: Icon | null;
 
   /** A string description of this resource. */
@@ -2700,7 +2700,7 @@ export type HistoryReferenceWorkflowState = {
 };
 
 /**
- * Icons are used to attach images to Organizations, Members, and Loading screens in the Clubhouse web application.
+ * Icons are used to attach images to Organizations, Members, and Loading screens in the Shortcut web application.
  */
 export type Icon = {
   /**
@@ -2743,10 +2743,10 @@ export type Identity = {
 };
 
 /**
- * An Iteration is a defined, time-boxed period of development for a collection of Stories. See https://help.clubhouse.io/hc/en-us/articles/360028953452-Iterations-Overview for more information.
+ * An Iteration is a defined, time-boxed period of development for a collection of Stories. See https://help.Shortcut.io/hc/en-us/articles/360028953452-Iterations-Overview for more information.
  */
 export type Iteration = {
-  /** The Clubhouse application url for the Iteration. */
+  /** The Shortcut application url for the Iteration. */
   app_url: string;
 
   /**
@@ -2817,7 +2817,7 @@ export type Iteration = {
  * IterationSlim represents the same resource as an Iteration, but is more light-weight. Use the [Get Iteration](#Get-Iteration) endpoint to fetch the unabridged payload for an Iteration.
  */
 export type IterationSlim = {
-  /** The Clubhouse application url for the Iteration. */
+  /** The Shortcut application url for the Iteration. */
   app_url: string;
 
   /**
@@ -2956,7 +2956,7 @@ export type IterationStats = {
  * A Label can be used to associate and filter Stories and Epics, and also create new Workspaces.
  */
 export type Label = {
-  /** The Clubhouse application url for the Label. */
+  /** The Shortcut application url for the Label. */
   app_url: string;
 
   /** A true/false boolean indicating if the Label has been archived. */
@@ -3007,7 +3007,7 @@ export type Label = {
  * A Label can be used to associate and filter Stories and Epics, and also create new Workspaces. A slim Label does not include aggregate stats. Fetch the Label using the labels endpoint to retrieve them.
  */
 export type LabelSlim = {
-  /** The Clubhouse application url for the Label. */
+  /** The Shortcut application url for the Label. */
   app_url: string;
 
   /** A true/false boolean indicating if the Label has been archived. */
@@ -3147,7 +3147,7 @@ export type LabelStats = {
 };
 
 /**
- * Linked files are stored on a third-party website and linked to one or more Stories. Clubhouse currently supports linking files from Google Drive, Dropbox, Box, and by URL.
+ * Linked files are stored on a third-party website and linked to one or more Stories. Shortcut currently supports linking files from Google Drive, Dropbox, Box, and by URL.
  */
 export type LinkedFile = {
   /** The content type of the image (e.g. txt/plain). */
@@ -3264,7 +3264,7 @@ export type MaxSearchResultsExceededError = {
 };
 
 /**
- * Details about individual Clubhouse user within the Clubhouse organization that has issued the token.
+ * Details about individual Shortcut user within the Shortcut organization that has issued the token.
  */
 export type Member = {
   /**
@@ -3286,7 +3286,7 @@ export type Member = {
   group_ids: string[];
 
   /**
-   * The Member's ID in Clubhouse.
+   * The Member's ID in Shortcut.
    * @format uuid
    */
   id: string;
@@ -3300,7 +3300,7 @@ export type Member = {
    */
   replaced_by?: string;
 
-  /** The Member's role in the Clubhouse organization. */
+  /** The Member's role in the Shortcut organization. */
   role: string;
 
   /**
@@ -3331,7 +3331,7 @@ export type MemberInfo = {
  * A Milestone is a collection of Epics that represent a release or some other large initiative that your organization is working on.
  */
 export type Milestone = {
-  /** The Clubhouse application url for the Milestone. */
+  /** The Shortcut application url for the Milestone. */
   app_url: string;
 
   /** An array of Categories attached to the Milestone. */
@@ -3434,10 +3434,10 @@ export type MilestoneStats = {
  * A group of Member profile details.
  */
 export type Profile = {
-  /** A true/false boolean indicating whether the Member has been deactivated within Clubhouse. */
+  /** A true/false boolean indicating whether the Member has been deactivated within Shortcut. */
   deactivated: boolean;
 
-  /** Icons are used to attach images to Organizations, Members, and Loading screens in the Clubhouse web application. */
+  /** Icons are used to attach images to Organizations, Members, and Loading screens in the Shortcut web application. */
   display_icon: Icon | null;
 
   /** The primary email address of the Member with the Organization. */
@@ -3472,14 +3472,14 @@ export type Project = {
   /** The Project abbreviation used in Story summaries. Should be kept to 3 characters at most. */
   abbreviation?: string | null;
 
-  /** The Clubhouse application url for the Project. */
+  /** The Shortcut application url for the Project. */
   app_url: string;
 
   /** True/false boolean indicating whether the Project is in an Archived state. */
   archived: boolean;
 
   /**
-   * The color associated with the Project in the Clubhouse member type.
+   * The color associated with the Project in the Shortcut member type.
    * @format css-color
    * @pattern ^#[a-fA-F0-9]{6}$
    */
@@ -3579,7 +3579,7 @@ export type ProjectStats = {
 };
 
 /**
- * Corresponds to a VCS Pull Request attached to a Clubhouse story.
+ * Corresponds to a VCS Pull Request attached to a Shortcut story.
  */
 export type PullRequest = {
   /**
@@ -3610,7 +3610,7 @@ export type PullRequest = {
   entity_type: string;
 
   /**
-   * The unique ID associated with the pull request in Clubhouse.
+   * The unique ID associated with the pull request in Shortcut.
    * @format int64
    */
   id: number;
@@ -3740,7 +3740,7 @@ export type Repository = {
   full_name?: string | null;
 
   /**
-   * The ID associated to the VCS repository in Clubhouse.
+   * The ID associated to the VCS repository in Shortcut.
    * @format int64
    */
   id?: number | null;
@@ -3773,7 +3773,7 @@ export type Search = {
    */
   page_size?: number;
 
-  /** See our help center article on [search operators](https://help.clubhouse.io/hc/en-us/articles/360000046646-Search-Operators) */
+  /** See our help center article on [search operators](https://help.Shortcut.io/hc/en-us/articles/360000046646-Search-Operators) */
   query: string;
 };
 
@@ -3923,10 +3923,10 @@ export type SearchStories = {
 };
 
 /**
- * Stories are the standard unit of work in Clubhouse and represent individual features, bugs, and chores.
+ * Stories are the standard unit of work in Shortcut and represent individual features, bugs, and chores.
  */
 export type Story = {
-  /** The Clubhouse application url for the Story. */
+  /** The Shortcut application url for the Story. */
   app_url: string;
 
   /** True if the story has been archived or not. */
@@ -4379,7 +4379,7 @@ export type StorySearchResults = {
  * StorySlim represents the same resource as a Story, but is more light-weight. For certain fields it provides ids rather than full resources (e.g., `comment_ids` and `file_ids`) and it also excludes certain aggregate values (e.g., `cycle_time`). The `description` field can be optionally included. Use the [Get Story](#Get-Story) endpoint to fetch the unabridged payload for a Story.
  */
 export type StorySlim = {
-  /** The Clubhouse application url for the Story. */
+  /** The Shortcut application url for the Story. */
   app_url: string;
 
   /** True if the story has been archived or not. */
@@ -4658,7 +4658,7 @@ export type Task = {
  * Comments associated with Epic Discussions.
  */
 export type ThreadedComment = {
-  /** The Clubhouse application url for the Comment. */
+  /** The Shortcut application url for the Comment. */
   app_url: string;
 
   /**
@@ -4909,7 +4909,7 @@ export type UpdateFile = {
   updated_at?: string;
 
   /**
-   * The unique ID assigned to the Member who uploaded the file to Clubhouse.
+   * The unique ID assigned to the Member who uploaded the file to Shortcut.
    * @format uuid
    */
   uploader_id?: string;
@@ -5356,7 +5356,7 @@ export type UpdateTask = {
 };
 
 /**
- * Workflow is the array of defined Workflow States. Workflow can be queried using the API but must be updated in the Clubhouse UI.
+ * Workflow is the array of defined Workflow States. Workflow can be queried using the API but must be updated in the Shortcut UI.
  */
 export type Workflow = {
   /** Indicates if an owner is automatically assigned when an unowned story is started. */

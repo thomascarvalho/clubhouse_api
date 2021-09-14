@@ -1,34 +1,34 @@
-# clubhouse_api
+# shortcut_api
 
-[![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Flatest-version%2Fx%2Fclubhouse_api%2Fmod.ts)](https://deno.land/x/clubhouse_api)
+[![Custom badge](https://img.shields.io/endpoint?url=https%3A%2F%2Fdeno-visualizer.danopia.net%2Fshields%2Flatest-version%2Fx%2Fshortcut_api%2Fmod.ts)](https://deno.land/x/shortcut_api)
 
-A clubhouse.io api wrapper for deno.
+A Shortcut (formerly clubhouse) api wrapper for deno.
 
 ## Usage
 
-Import the clubhouse client and initialize it with your token.
+Import the Shortcut client and initialize it with your token.
 
 ```ts
-import { Clubhouse } from "https://deno.land/x/clubhouse_api@v1.0.1/mod.ts";
+import { Shortcut } from "https://deno.land/x/shortcut_api@v1.0.1/mod.ts";
 
-const client = new Clubhouse({ token: "xxx-xxx-xxx" });
+const client = new Shortcut({ token: "xxx-xxx-xxx" });
 ```
 
 ### Via env
 
-Define env var `CLUBHOUSE_API_TOKEN` with your token.
+Define env var `SHORTCUT_API_TOKEN` with your token.
 
 > :warning: With this method you will have to launch your application with the
 > `--allow-env` flag
 
 ```ts
-const client = new Clubhouse();
+const client = new Shortcut();
 ```
 
 ## Features
 
-From the client all the methods currently accessible (06/20/2021) from the API
-v3 are available. https://clubhouse.io/api/rest/v3/
+From the client all the methods currently accessible (14/09/2021) from the API
+v3 are available. https://shortcut.com/api/rest/v3
 
 Categories, Entity-Templates, Epic-Workflow, Epics, External-Link, Files,
 Groups, Iterations, Labels, Linked-Files, Member, Members, Milestones, Projects,

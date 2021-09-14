@@ -3,46 +3,46 @@ import {
   assertEquals,
   assertExists,
   assertThrowsAsync,
-} from "https://deno.land/std@0.97.0/testing/asserts.ts";
+} from "https://deno.land/std@0.106.0/testing/asserts.ts";
 
-// Run tests with your CLUBHOUSE_API_TOKEN env var
+// Run tests with your SHORTCUT_API_TOKEN env var
 
-import { Clubhouse, FetchException, NotFoundException } from "./mod.ts";
+import { Shortcut, FetchException, NotFoundException } from "./mod.ts";
 
 Deno.test("Initialize client", () => {
-  const client = new Clubhouse();
+  const client = new Shortcut();
   assertExists(client.getToken());
-  assertEquals(client.getBaseUrl(), "https://api.clubhouse.io/api/v3");
+  assertEquals(client.getBaseUrl(), "https://api.app.shortcut.com/api/v3");
 });
 
 Deno.test("Throws error if bad token", async () => {
-  const client = new Clubhouse({ token: "badToken" });
+  const client = new Shortcut({ token: "badToken" });
 
   await assertThrowsAsync(
     async () => {
       return await client.getIterations();
     },
     FetchException,
-    "Unauthorized",
+    "Unauthorized"
   );
 });
 
 Deno.test("Fetch iterations", async () => {
-  const client = new Clubhouse();
+  const client = new Shortcut();
 
   const iterations = await client.getIterations();
   assert(iterations.length > 0, "Has iterations");
 });
 
 Deno.test("Fetch Stories", async () => {
-  const client = new Clubhouse();
+  const client = new Shortcut();
 
   const results = await client.search("clubhouse");
   assert(results.stories.data.length > 0, "Has stories");
 });
 
 Deno.test("Create, update and delete story", async () => {
-  const client = new Clubhouse();
+  const client = new Shortcut();
 
   const projects = await client.getProjects();
 
@@ -66,7 +66,7 @@ Deno.test("Create, update and delete story", async () => {
   assert(updatedStory.name === story.name, "Same name");
   assert(
     updatedStory.description === "Updated fake description",
-    "Updated description",
+    "Updated description"
   );
 
   // Get
@@ -81,6 +81,6 @@ Deno.test("Create, update and delete story", async () => {
       return await client.getStory(story.id);
     },
     NotFoundException,
-    `/stories/${story.id}`,
+    `/stories/${story.id}`
   );
 });

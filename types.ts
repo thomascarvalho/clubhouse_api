@@ -16,7 +16,7 @@ export type ApiOptions = {
   params?: GetParams;
   headers?: {
     "Content-Type": ContentType.JSON;
-    "Clubhouse-Token": string;
+    "Shortcut-Token": string;
   };
 };
 

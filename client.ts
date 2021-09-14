@@ -8,9 +8,9 @@ import {
   ContentType,
   GetParams,
 } from "./types.ts";
-import * as Ch from "./clubhouse_types.ts";
+import * as SC from "./shortcut_types.ts";
 
-export class Clubhouse {
+export class Shortcut {
   #token: string;
   #baseUrl: string;
   #defaultOptions: ApiOptions;
@@ -19,22 +19,22 @@ export class Clubhouse {
     this.#token = config?.token || this.getTokenFromEnv();
     if (!this.#token) {
       throw new Error(
-        "A clubhouse token is required. Pass the token to the Clubhouse constructor or in CLUBHOUSE_API_TOKEN env var.",
+        "A Shortcut token is required. Pass the token to the Shortcut constructor or in SHORTCUT_API_TOKEN env var."
       );
     }
-    this.#baseUrl = config?.baseUrl || "https://api.clubhouse.io/api/v3";
+    this.#baseUrl = config?.baseUrl || "https://api.app.shortcut.com/api/v3";
 
     this.#defaultOptions = {
       method: "GET",
       headers: {
         "Content-Type": ContentType.JSON,
-        "Clubhouse-Token": this.#token,
+        "Shortcut-Token": this.#token,
       },
     };
   }
 
   private getTokenFromEnv(): string {
-    return Deno.env.get("CLUBHOUSE_API_TOKEN") as string;
+    return Deno.env.get("SHORTCUT_API_TOKEN") as string;
   }
 
   private async get<T>(path: string, params?: GetParams) {
@@ -53,20 +53,14 @@ export class Clubhouse {
     return await this.api<T>(path, { body, method: "PUT" });
   }
 
-  private async api<T>(
-    path: string,
-    options?: ApiOptions,
-  ): Promise<T> {
+  private async api<T>(path: string, options?: ApiOptions): Promise<T> {
     const url = urlcat(`${this.#baseUrl}${path}`, options?.params as ParamMap);
     const init = {
       ...this.#defaultOptions,
       ...options,
       body: options?.body ? JSON.stringify(options.body) : undefined,
     };
-    return await fetch(
-      url,
-      init,
-    ).then((response) => {
+    return await fetch(url, init).then((response) => {
       if (!response.ok) {
         response.body?.cancel();
         if (response.status === 404) {
@@ -84,321 +78,296 @@ export class Clubhouse {
   getToken = () => this.#token;
 
   // Categories
-  getCategories = () => this.get<Ch.Category[]>(`/categories`);
+  getCategories = () => this.get<SC.Category[]>(`/categories`);
 
   getCategory = (categoryId: string) =>
-    this.get<Ch.Category>(
-      `/categories/${categoryId}`,
-    );
+    this.get<SC.Category>(`/categories/${categoryId}`);
 
-  createCategory = (params: Ch.CreateCategory) =>
-    this.post<Ch.Category>(
-      `/categories`,
-      params,
-    );
+  createCategory = (params: SC.CreateCategory) =>
+    this.post<SC.Category>(`/categories`, params);
 
-  updateCategory = (categoryId: string, params?: Ch.UpdateCategory) =>
-    this.put<Ch.Category>(
-      `/categories/${categoryId}`,
-      params,
-    );
+  updateCategory = (categoryId: string, params?: SC.UpdateCategory) =>
+    this.put<SC.Category>(`/categories/${categoryId}`, params);
 
   deleteCategory = (categoryId: string) =>
-    this.delete<Ch.Category>(
-      `/categories/${categoryId}`,
-    );
+    this.delete<SC.Category>(`/categories/${categoryId}`);
 
   getCategoryMilestones = (categoryId: string) =>
-    this.get<Ch.Milestone[]>(
-      `/categories/${categoryId}/milestones`,
-    );
+    this.get<SC.Milestone[]>(`/categories/${categoryId}/milestones`);
 
   // Entity-templates
-  getEntityTemplates = () => this.get<Ch.EntityTemplate[]>(`/entity-templates`);
+  getEntityTemplates = () => this.get<SC.EntityTemplate[]>(`/entity-templates`);
 
-  createEntityTemplate = (params: Ch.CreateEntityTemplate) =>
-    this.post<Ch.EntityTemplate>(`/entity-templates`, params);
+  createEntityTemplate = (params: SC.CreateEntityTemplate) =>
+    this.post<SC.EntityTemplate>(`/entity-templates`, params);
 
   disableEntityTemplates = () => this.put(`/entity-templates/disable`);
 
   enableEntityTemplates = () => this.put(`/entity-templates/enable`);
 
   getEntityTemplate = (entityTemplateId: string) =>
-    this.get<Ch.EntityTemplate>(`/entity-templates/${entityTemplateId}`);
+    this.get<SC.EntityTemplate>(`/entity-templates/${entityTemplateId}`);
 
   updateEntityTemplate = (
     entityTemplateId: string,
-    params?: Ch.UpdateEntityTemplate,
+    params?: SC.UpdateEntityTemplate
   ) =>
-    this.put<Ch.EntityTemplate>(
+    this.put<SC.EntityTemplate>(
       `/entity-templates/${entityTemplateId}`,
-      params,
+      params
     );
 
-  deleteEntityTemplate = (
-    entityTemplateId: string,
-  ) => this.delete<Ch.EntityTemplate>(`/entity-templates/${entityTemplateId}`);
+  deleteEntityTemplate = (entityTemplateId: string) =>
+    this.delete<SC.EntityTemplate>(`/entity-templates/${entityTemplateId}`);
 
   // Epic Workflow
-  getEpicWorkflow = () => this.get<Ch.EpicWorkflow>(`/epic-workflow`);
+  getEpicWorkflow = () => this.get<SC.EpicWorkflow>(`/epic-workflow`);
 
   // Epics
-  getEpics = (params?: Ch.ListEpics) =>
-    this.get<Ch.EpicSlim[]>(`/epics`, params);
+  getEpics = (params?: SC.ListEpics) =>
+    this.get<SC.EpicSlim[]>(`/epics`, params);
 
-  createEpic = (params: Ch.CreateEpic) => this.post<Ch.Epic>(`/epics`, params);
+  createEpic = (params: SC.CreateEpic) => this.post<SC.Epic>(`/epics`, params);
 
-  getEpic = (epicId: number) => this.get<Ch.Epic>(`/epics/${epicId}`);
+  getEpic = (epicId: number) => this.get<SC.Epic>(`/epics/${epicId}`);
 
-  updateEpic = (epicId: number, params: Ch.UpdateEpic) =>
-    this.put<Ch.Epic>(`/epics/${epicId}`, params);
+  updateEpic = (epicId: number, params: SC.UpdateEpic) =>
+    this.put<SC.Epic>(`/epics/${epicId}`, params);
 
   deleteEpic = (epicId: number) => this.delete(`/epics/${epicId}`);
 
   getEpicComments = (epicId: number) =>
-    this.get<Ch.ThreadedComment[]>(`/epics/${epicId}/comments`);
+    this.get<SC.ThreadedComment[]>(`/epics/${epicId}/comments`);
 
-  createEpicComment = (epicId: number, params: Ch.CreateEpicComment) =>
-    this.post<Ch.ThreadedComment>(`/epics/${epicId}/comments`, params);
+  createEpicComment = (epicId: number, params: SC.CreateEpicComment) =>
+    this.post<SC.ThreadedComment>(`/epics/${epicId}/comments`, params);
 
   getEpicComment = (epicId: number, commentId: number) =>
-    this.get<Ch.ThreadedComment>(`/epics/${epicId}/comments/${commentId}`);
+    this.get<SC.ThreadedComment>(`/epics/${epicId}/comments/${commentId}`);
 
   createEpicCommentComment = (
     epicId: number,
     commentId: number,
-    params: Ch.CreateEpicComment,
+    params: SC.CreateEpicComment
   ) =>
-    this.post<Ch.ThreadedComment>(
+    this.post<SC.ThreadedComment>(
       `/epics/${epicId}/comments/${commentId}`,
-      params,
+      params
     );
 
   updateEpicComment = (
     epicId: number,
     commentId: number,
-    params: Ch.UpdateComment,
+    params: SC.UpdateComment
   ) =>
-    this.put<Ch.ThreadedComment>(
+    this.put<SC.ThreadedComment>(
       `/epics/${epicId}/comments/${commentId}`,
-      params,
+      params
     );
 
-  deleteEpicComment = (
-    epicId: number,
-    commentId: number,
-  ) =>
-    this.delete<Ch.ThreadedComment>(`/epics/${epicId}/comments/${commentId}`);
+  deleteEpicComment = (epicId: number, commentId: number) =>
+    this.delete<SC.ThreadedComment>(`/epics/${epicId}/comments/${commentId}`);
 
-  getEpicStories = (epicId: number, params?: Ch.ListEpics) =>
-    this.get<Ch.StorySlim[]>(`/epics/${epicId}/stories`, params);
+  getEpicStories = (epicId: number, params?: SC.ListEpics) =>
+    this.get<SC.StorySlim[]>(`/epics/${epicId}/stories`, params);
 
   unlinkProductboardFromEpic = (epicId: number) =>
     this.post(`/epics/${epicId}/unlink-productboard`);
 
   // External Link
-  getExternalLinkStories = (params: Ch.GetExternalLinkStoriesParams) =>
-    this.get<Ch.StorySlim[]>(`/external-link/stories`, params);
+  getExternalLinkStories = (params: SC.GetExternalLinkStoriesParams) =>
+    this.get<SC.StorySlim[]>(`/external-link/stories`, params);
 
   // Files
   getFiles = () => this.get<File[]>(`/files`);
 
   getFile = (fileId: number) => this.get<File>(`/files/${fileId}`);
 
-  updateFile = (fileId: number, params?: Ch.UpdateFile) =>
+  updateFile = (fileId: number, params?: SC.UpdateFile) =>
     this.put<File>(`/files/${fileId}`, params);
 
   deleteFile = (fileId: number) => this.delete(`/files/${fileId}`);
 
-  // TODO : https://clubhouse.io/api/rest/v3/#Upload-Files
+  // TODO : https://Shortcut.io/api/rest/v3/#Upload-Files
 
-  getGroups = () => this.get<Ch.Group[]>(`/groups`);
+  getGroups = () => this.get<SC.Group[]>(`/groups`);
 
-  createGroup = (params: Ch.CreateGroup) =>
-    this.post<Ch.Group[]>(`/groups`, params);
+  createGroup = (params: SC.CreateGroup) =>
+    this.post<SC.Group[]>(`/groups`, params);
 
   disableGroups = () => this.put(`/groups/disable`);
 
   enableGroups = () => this.put(`/groups/enable`);
 
-  getGroup = (groupId: string) => this.get<Ch.Group>(`/groups/${groupId}`);
+  getGroup = (groupId: string) => this.get<SC.Group>(`/groups/${groupId}`);
 
-  updateGroup = (groupId: string, params: Ch.UpdateGroup) =>
-    this.put<Ch.Group>(`/groups/${groupId}`, params);
+  updateGroup = (groupId: string, params: SC.UpdateGroup) =>
+    this.put<SC.Group>(`/groups/${groupId}`, params);
 
-  getGroupStories = (groupId: string, params?: Ch.ListGroupStories) =>
-    this.get<Ch.StorySlim[]>(`/groups/${groupId}`, params);
+  getGroupStories = (groupId: string, params?: SC.ListGroupStories) =>
+    this.get<SC.StorySlim[]>(`/groups/${groupId}`, params);
 
   // Iterations
-  getIterations = () => this.get<Ch.IterationSlim[]>(`/iterations`);
+  getIterations = () => this.get<SC.IterationSlim[]>(`/iterations`);
 
-  createIteration = (params: Ch.CreateIteration) =>
-    this.post<Ch.Iteration>(`/iterations`, params);
+  createIteration = (params: SC.CreateIteration) =>
+    this.post<SC.Iteration>(`/iterations`, params);
 
   disableIterations = () => this.put(`/iterations/disable`);
 
   enableIterations = () => this.put(`/iterations/enable`);
 
   getIteration = (iterationId: number) =>
-    this.get<Ch.Iteration>(`/iterations/${iterationId}`);
+    this.get<SC.Iteration>(`/iterations/${iterationId}`);
 
-  updateIteration = (iterationId: number, params?: Ch.UpdateIteration) =>
-    this.put<Ch.Iteration>(`/iterations/${iterationId}`, params);
+  updateIteration = (iterationId: number, params?: SC.UpdateIteration) =>
+    this.put<SC.Iteration>(`/iterations/${iterationId}`, params);
 
   deleteIteration = (iterationId: number) =>
     this.delete(`/iterations/${iterationId}`);
 
   getIterationStories = (
     iterationId: number,
-    params?: Ch.GetIterationStories,
-  ) => this.get<Ch.StorySlim[]>(`/iterations/${iterationId}/stories`, params);
+    params?: SC.GetIterationStories
+  ) => this.get<SC.StorySlim[]>(`/iterations/${iterationId}/stories`, params);
 
   // Labels
-  getLabels = () => this.get<Ch.Label[]>(`/labels`);
+  getLabels = () => this.get<SC.Label[]>(`/labels`);
 
-  createLabel = (params: Ch.CreateLabelParams) =>
-    this.post<Ch.Label>(`/labels`, params);
+  createLabel = (params: SC.CreateLabelParams) =>
+    this.post<SC.Label>(`/labels`, params);
 
-  getLabel = (labelId: number) => this.get<Ch.Label>(`/labels/${labelId}`);
+  getLabel = (labelId: number) => this.get<SC.Label>(`/labels/${labelId}`);
 
-  updateLabel = (labelId: number, params?: Ch.UpdateLabel) =>
-    this.put<Ch.Label>(`/labels/${labelId}`, params);
+  updateLabel = (labelId: number, params?: SC.UpdateLabel) =>
+    this.put<SC.Label>(`/labels/${labelId}`, params);
 
   deleteLabel = (labelId: number) => this.delete(`/labels/${labelId}`);
 
   getLabelEpics = (labelId: number) =>
-    this.get<Ch.EpicSlim[]>(`/labels/${labelId}/epics`);
+    this.get<SC.EpicSlim[]>(`/labels/${labelId}/epics`);
 
-  getLabelStories = (labelId: number, params?: Ch.GetLabelStories) =>
-    this.get<Ch.StorySlim[]>(`/labels/${labelId}/stories`, { body: params });
+  getLabelStories = (labelId: number, params?: SC.GetLabelStories) =>
+    this.get<SC.StorySlim[]>(`/labels/${labelId}/stories`, { body: params });
 
   // Linked-Files
-  getLinkedFiles = () => this.get<Ch.LinkedFile[]>(`/linked-files`);
+  getLinkedFiles = () => this.get<SC.LinkedFile[]>(`/linked-files`);
 
-  createLinkedFile = (params: Ch.CreateLinkedFile) =>
-    this.post<Ch.LinkedFile>(`/linked-files`, params);
+  createLinkedFile = (params: SC.CreateLinkedFile) =>
+    this.post<SC.LinkedFile>(`/linked-files`, params);
 
   getLinkedFile = (linkedFileId: number) =>
-    this.get<Ch.LinkedFile>(`/linked-files/${linkedFileId}`);
+    this.get<SC.LinkedFile>(`/linked-files/${linkedFileId}`);
 
-  updateLinkedFile = (linkedFileId: number, params?: Ch.UpdateLinkedFile) =>
-    this.put<Ch.LinkedFile>(`/linked-files/${linkedFileId}`, params);
+  updateLinkedFile = (linkedFileId: number, params?: SC.UpdateLinkedFile) =>
+    this.put<SC.LinkedFile>(`/linked-files/${linkedFileId}`, params);
 
   deleteLinkedFile = (linkedFileId: number) =>
     this.delete(`/linked-files/${linkedFileId}`);
 
   // Members
-  getCurrentMemberInfo = () => this.get<Ch.MemberInfo>(`/member`);
+  getCurrentMemberInfo = () => this.get<SC.MemberInfo>(`/member`);
 
-  getMembers = (params?: Ch.ListMembers) =>
-    this.get<Ch.Member[]>(
-      `/members`,
-      params,
-    );
+  getMembers = (params?: SC.ListMembers) =>
+    this.get<SC.Member[]>(`/members`, params);
 
-  getMember = (
-    memberId: string,
-    params?: Ch.GetMember,
-  ) =>
-    this.get<Ch.Member>(
-      `/members/${memberId}`,
-      params,
-    );
+  getMember = (memberId: string, params?: SC.GetMember) =>
+    this.get<SC.Member>(`/members/${memberId}`, params);
 
   // Milestones
-  getMilestones = () => this.get<Ch.Milestone[]>(`/milestones`);
+  getMilestones = () => this.get<SC.Milestone[]>(`/milestones`);
 
-  createMilestone = (params: Ch.CreateMilestone) =>
-    this.post<Ch.Milestone[]>(`/milestones`, params);
+  createMilestone = (params: SC.CreateMilestone) =>
+    this.post<SC.Milestone[]>(`/milestones`, params);
 
   getMilestone = (milestoneId: number) =>
-    this.get<Ch.Milestone>(`/milestones/${milestoneId}`);
+    this.get<SC.Milestone>(`/milestones/${milestoneId}`);
 
-  updateMilestone = (milestoneId: number, params?: Ch.UpdateMilestone) =>
-    this.put<Ch.Milestone>(`/milestones/${milestoneId}`, params);
+  updateMilestone = (milestoneId: number, params?: SC.UpdateMilestone) =>
+    this.put<SC.Milestone>(`/milestones/${milestoneId}`, params);
 
   deleteMilestone = (milestoneId: number) =>
-    this.delete<Ch.Milestone>(`/milestones/${milestoneId}`);
+    this.delete<SC.Milestone>(`/milestones/${milestoneId}`);
 
   getMilestoneEpics = (milestoneId: number) =>
-    this.get<Ch.Milestone>(`/milestones/${milestoneId}/epics`);
+    this.get<SC.Milestone>(`/milestones/${milestoneId}/epics`);
 
   //  Projects
-  getProjects = () => this.get<Ch.Project[]>(`/projects`);
+  getProjects = () => this.get<SC.Project[]>(`/projects`);
 
-  createProject = (params: Ch.CreateProject) =>
-    this.post<Ch.Project>(`/projects`, params);
+  createProject = (params: SC.CreateProject) =>
+    this.post<SC.Project>(`/projects`, params);
 
   getProject = (projectId: number) =>
-    this.get<Ch.Project>(`/projects/${projectId}`);
+    this.get<SC.Project>(`/projects/${projectId}`);
 
-  updateProject = (projectId: number, params?: Ch.UpdateProject) =>
-    this.put<Ch.Project>(`/projects/${projectId}`, params);
+  updateProject = (projectId: number, params?: SC.UpdateProject) =>
+    this.put<SC.Project>(`/projects/${projectId}`, params);
 
   deleteProject = (projectId: number) => this.delete(`/projects/${projectId}`);
 
   getProjectStories = (projectId: number) =>
-    this.get<Ch.StorySlim[]>(`/projects/${projectId}/stories`);
+    this.get<SC.StorySlim[]>(`/projects/${projectId}/stories`);
 
   // Repositories
-  getRepositories = () => this.get<Ch.Repository[]>(`/repositories`);
+  getRepositories = () => this.get<SC.Repository[]>(`/repositories`);
 
   getRepository = (repositoryId: number) =>
-    this.get<Ch.Repository>(`/repositories/${repositoryId}`);
+    this.get<SC.Repository>(`/repositories/${repositoryId}`);
 
   // Search
 
   search = (query: string, pageSize = 25) =>
-    this.get<Ch.SearchResults>(`/search`, {
+    this.get<SC.SearchResults>(`/search`, {
       query,
       page_size: pageSize,
     });
 
   searchEpics = (query: string, pageSize = 25) =>
-    this.get<Ch.EpicSearchResults>(`/search/epics`, {
+    this.get<SC.EpicSearchResults>(`/search/epics`, {
       query,
       page_size: pageSize,
     });
 
   searchStories = (query: string, pageSize?: number) =>
-    this.get<Ch.StorySearchResults>(`/search/stories`, {
+    this.get<SC.StorySearchResults>(`/search/stories`, {
       query,
       page_size: pageSize,
     });
 
   // Stories
 
-  createStory = (params: Ch.CreateStoryParams) =>
-    this.post<Ch.Story>(`/stories`, params);
+  createStory = (params: SC.CreateStoryParams) =>
+    this.post<SC.Story>(`/stories`, params);
 
-  createMultipleStories = (params: Ch.CreateStories) =>
-    this.post<Ch.StorySlim[]>(`/stories/bulk`, params);
+  createMultipleStories = (params: SC.CreateStories) =>
+    this.post<SC.StorySlim[]>(`/stories/bulk`, params);
 
-  updateMultipleStories = (params: Ch.UpdateStories) =>
-    this.put<Ch.StorySlim[]>(`/stories/bulk`, params);
+  updateMultipleStories = (params: SC.UpdateStories) =>
+    this.put<SC.StorySlim[]>(`/stories/bulk`, params);
 
-  deleteMultipleStories = (params: Ch.DeleteStories) =>
-    this.delete<Ch.StorySlim[]>(`/stories/bulk`, params);
+  deleteMultipleStories = (params: SC.DeleteStories) =>
+    this.delete<SC.StorySlim[]>(`/stories/bulk`, params);
 
-  getStory = (storyId: number) => this.get<Ch.Story>(`/stories/${storyId}`);
+  getStory = (storyId: number) => this.get<SC.Story>(`/stories/${storyId}`);
 
-  updateStory = (storyId: number, params: Ch.UpdateStory) =>
-    this.put<Ch.Story>(`/stories/${storyId}`, params);
+  updateStory = (storyId: number, params: SC.UpdateStory) =>
+    this.put<SC.Story>(`/stories/${storyId}`, params);
 
   deleteStory = (storyId: number) => this.delete(`/stories/${storyId}`);
 
-  createComment = (storyId: number, params: Ch.CreateStoryCommentParams) =>
-    this.post<Ch.Comment>(`/stories/${storyId}`, params);
+  createComment = (storyId: number, params: SC.CreateStoryCommentParams) =>
+    this.post<SC.Comment>(`/stories/${storyId}`, params);
 
   getComment = (storyId: number, commentId: number) =>
-    this.get<Ch.Comment>(`/stories/${storyId}/comments/${commentId}`);
+    this.get<SC.Comment>(`/stories/${storyId}/comments/${commentId}`);
 
   updateComment = (
     storyId: number,
     commentId: number,
-    params: Ch.UpdateComment,
+    params: SC.UpdateComment
   ) =>
-    this.put<Ch.Comment>(`/stories/${storyId}/comments/${commentId}`, params);
+    this.put<SC.Comment>(`/stories/${storyId}/comments/${commentId}`, params);
 
   deleteComment = (storyId: number, commentId: string) =>
     this.delete(`/stories/${storyId}/comments/${commentId}`);
@@ -406,65 +375,62 @@ export class Clubhouse {
   createReaction = (
     storyId: number,
     commentId: number,
-    params: Ch.CreateOrDeleteReaction,
+    params: SC.CreateOrDeleteReaction
   ) =>
-    this.post<Ch.Reaction>(
+    this.post<SC.Reaction>(
       `/stories/${storyId}/comments/${commentId}/reactions`,
-      params,
+      params
     );
 
   deleteReaction = (
     storyId: number,
     commentId: number,
-    params: Ch.CreateOrDeleteReaction,
+    params: SC.CreateOrDeleteReaction
   ) =>
-    this.delete<Ch.Reaction>(
+    this.delete<SC.Reaction>(
       `/stories/${storyId}/comments/${commentId}/reactions`,
-      params,
+      params
     );
 
   getStoryHistory = (storyId: number) =>
-    this.get<Ch.History[]>(`/stories/${storyId}/history`);
+    this.get<SC.History[]>(`/stories/${storyId}/history`);
 
-  createTask = (storyId: number, params: Ch.CreateTaskParams) =>
-    this.post<Ch.Task>(`/stories/${storyId}/tasks`, params);
+  createTask = (storyId: number, params: SC.CreateTaskParams) =>
+    this.post<SC.Task>(`/stories/${storyId}/tasks`, params);
 
   getTask = (storyId: number, taskId: number) =>
-    this.get<Ch.Task>(`/stories/${storyId}/tasks/${taskId}`);
+    this.get<SC.Task>(`/stories/${storyId}/tasks/${taskId}`);
 
-  updateTask = (storyId: number, taskId: number, params: Ch.UpdateTask) =>
-    this.put<Ch.Task>(`/stories/${storyId}/tasks/${taskId}`, params);
+  updateTask = (storyId: number, taskId: number, params: SC.UpdateTask) =>
+    this.put<SC.Task>(`/stories/${storyId}/tasks/${taskId}`, params);
 
   deleteTask = (storyId: number, taskId: number) =>
-    this.delete<Ch.Task>(`/stories/${storyId}/tasks/${taskId}`);
+    this.delete<SC.Task>(`/stories/${storyId}/tasks/${taskId}`);
 
   // Story-Links
 
-  createStoryLink = (params: Ch.CreateStoryLink) =>
-    this.post<Ch.StoryLink>(`/story-links`, params);
+  createStoryLink = (params: SC.CreateStoryLink) =>
+    this.post<SC.StoryLink>(`/story-links`, params);
 
   getStoryLink = (storyLinkId: number) =>
-    this.get<Ch.StoryLink>(`/story-links/${storyLinkId}`);
+    this.get<SC.StoryLink>(`/story-links/${storyLinkId}`);
 
-  updateStoryLink = (storyLinkId: number, params: Ch.UpdateStoryLink) =>
-    this.put<Ch.StoryLink>(`/story-links/${storyLinkId}`, params);
+  updateStoryLink = (storyLinkId: number, params: SC.UpdateStoryLink) =>
+    this.put<SC.StoryLink>(`/story-links/${storyLinkId}`, params);
 
   deleteStoryLink = (storyLinkId: number) =>
-    this.delete<Ch.StoryLink>(`/story-links/${storyLinkId}`);
+    this.delete<SC.StoryLink>(`/story-links/${storyLinkId}`);
 
   // Workflows
-  getWorkflows = () => this.get<Ch.Workflow[]>(`/workflows`);
+  getWorkflows = () => this.get<SC.Workflow[]>(`/workflows`);
 
   getWorkflow = (workflowId: number) =>
-    this.get<Ch.Workflow>(`/workflows/${workflowId}`);
+    this.get<SC.Workflow>(`/workflows/${workflowId}`);
 }
 
 export class FetchException extends Error {
   readonly message: string;
-  constructor(
-    readonly response: string,
-    readonly status: number,
-  ) {
+  constructor(readonly response: string, readonly status: number) {
     super();
     this.message = response;
   }
@@ -472,10 +438,7 @@ export class FetchException extends Error {
 
 export class NoContentException extends Error {
   readonly message: string;
-  constructor(
-    readonly url: string,
-    readonly status: number,
-  ) {
+  constructor(readonly url: string, readonly status: number) {
     super();
     this.message = url;
   }
@@ -483,10 +446,7 @@ export class NoContentException extends Error {
 
 export class NotFoundException extends Error {
   readonly message: string;
-  constructor(
-    readonly url: string,
-    readonly status: number,
-  ) {
+  constructor(readonly url: string, readonly status: number) {
     super();
     this.message = url;
   }
